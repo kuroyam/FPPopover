@@ -373,7 +373,7 @@
     }
     else if (self.tint == FPPopoverDarkGrayTint)
     {
-        CGContextSetRGBFillColor(ctx, 0.192, 0.192, 0.2, 1.0);
+        CGContextSetRGBFillColor(ctx, 0.122, 0.122, 0.129, 1.0);
     }
     else if(self.tint == FPPopoverLightGrayTint)
     {
