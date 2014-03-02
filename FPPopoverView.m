@@ -10,9 +10,9 @@
 #import "FPPopoverView.h"
 #import "ARCMacros.h"
 
-#define FP_POPOVER_ARROW_HEIGHT 20.0
+#define FP_POPOVER_ARROW_HEIGHT 10.0
 #define FP_POPOVER_ARROW_BASE 20.0
-#define FP_POPOVER_RADIUS 10.0
+#define FP_POPOVER_RADIUS 3.0
 
 //iVars
 @interface FPPopoverView()
@@ -64,8 +64,8 @@
         //to get working the animations
         self.contentMode = UIViewContentModeRedraw;
 
-        //3d border default is on
-        self.draw3dBorder = YES;
+        //3d border default is off
+        self.draw3dBorder = NO;
         
         //border
         self.border = YES;
@@ -356,10 +356,7 @@
     [super drawRect:rect];
     
 
-    CGGradientRef gradient = [self newGradient];
-    
-    
-    CGContextRef ctx = UIGraphicsGetCurrentContext();    
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextSaveGState(ctx);
     
     //content fill
@@ -369,29 +366,14 @@
     CGContextAddPath(ctx, contentPath);
     CGContextClip(ctx);
 
-    //  Draw a linear gradient from top to bottom
-    CGPoint start;
-    CGPoint end;
-    if(_arrowDirection == FPPopoverArrowDirectionUp || _arrowDirection == FPPopoverNoArrow)
-    {
-        start = CGPointMake(self.bounds.size.width/2.0, 0);
-        end = CGPointMake(self.bounds.size.width/2.0,40);
-    }
-    else 
-    {
-        start = CGPointMake(self.bounds.size.width/2.0, 0);
-        end = CGPointMake(self.bounds.size.width/2.0,20);
-    }
-
-
-    
-    CGContextDrawLinearGradient(ctx, gradient, start, end, 0);
-    
-    CGGradientRelease(gradient);
     //fill the other part of path
     if(self.tint == FPPopoverBlackTint)
     {
-        CGContextSetRGBFillColor(ctx, 0.1, 0.1, 0.1, 1.0);        
+        CGContextSetRGBFillColor(ctx, 0.1, 0.1, 0.1, 1.0);
+    }
+    else if (self.tint == FPPopoverDarkGrayTint)
+    {
+        CGContextSetRGBFillColor(ctx, 0.192, 0.192, 0.2, 1.0);
     }
     else if(self.tint == FPPopoverLightGrayTint)
     {
@@ -411,16 +393,16 @@
     }
 
     
-    CGContextFillRect(ctx, CGRectMake(0, end.y, self.bounds.size.width, self.bounds.size.height-end.y));
+    CGContextFillRect(ctx, CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height));
     //internal border
-    CGContextBeginPath(ctx);
-    CGContextAddPath(ctx, contentPath);
-    CGContextSetRGBStrokeColor(ctx, 0.7, 0.7, 0.7, 1.0);
-    CGContextSetLineWidth(ctx, 1);
-    CGContextSetLineCap(ctx,kCGLineCapRound);
-    CGContextSetLineJoin(ctx, kCGLineJoinRound);
-    CGContextStrokePath(ctx);
-    CGPathRelease(contentPath);
+//    CGContextBeginPath(ctx);
+//    CGContextAddPath(ctx, contentPath);
+//    CGContextSetRGBStrokeColor(ctx, 0.7, 0.7, 0.7, 1.0);
+//    CGContextSetLineWidth(ctx, 1);
+//    CGContextSetLineCap(ctx,kCGLineCapRound);
+//    CGContextSetLineJoin(ctx, kCGLineJoinRound);
+//    CGContextStrokePath(ctx);
+//    CGPathRelease(contentPath);
 
     //external border
     CGPathRef externalBorderPath = [self newContentPathWithBorderWidth:1.0 arrowDirection:_arrowDirection];
